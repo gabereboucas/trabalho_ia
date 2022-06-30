@@ -9,6 +9,11 @@
 1- Baixe o repositório 
 
 2- Abra a pasta no cmd e execute o comando:
+>>crie um ambiente virtual
+```
+python3 -m venv ambiente_virtual
+```
+>Após criar seu ambiente virtual execute os seguintes passo: (NOTA: os ... referem-se ao caminho do seu computador E o nome ia_jogocobra também é ficticio)
 ```
 C:\...\...\ia_jogocobra\ambiente_virtual
 C:\...\...\ia_jogocobra\ambiente_virtual>cd scripts 
