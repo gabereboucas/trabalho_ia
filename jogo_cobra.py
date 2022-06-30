@@ -15,9 +15,11 @@ class Direction(Enum):    #Classe base para criar constantes enumeradas
     UP = 3
     DOWN = 4
 
-Point = namedtuple('Point','x,y')
+Point = namedtuple('Point','x,y') # presente no módulo collections.Assim como os dicionários, 
+#eles contêm chaves com hash para um valor específico. Mas, ao contrário, ele suporta tanto o acesso 
+# do valor-chave quanto a iteração, a funcionalidade que os dicionários não possuem.
 
-random_color=list(np.random.choice(range(255),size=4))
+random_color=list(np.random.choice(range(255),size=4)) #modifica cor RGB e brilho, da cobra
 random_color2=list(np.random.choice(range(255),size=4))
 random_color3=list(np.random.choice(range(255),size=4))
 
@@ -28,41 +30,45 @@ COR_COMIDA = (random_color)
 COR_QUAD = (random_color2)
 COR_STROKE = (random_color3)
 
-DIMENSAO_QUAD = 20
-SPEED = 23
+DIMENSAO_QUAD = 20 # dimensiona o tamanho da cobra px
+SPEED = 23         # velocidade da cobra px
 
-class jogo_cobra:
+class jogo_cobra:  # classe que cria jogo cobra
 
-    def __init__(self):
+    def __init__(self): # __init__ O método permite que a classe inicialize os atributos do objeto e 
+        #não serve para nenhum outro propósito.É usado apenas dentro de classes
+        # Self: permite acessar facilmente todas as instâncias definidas dentro de uma classe, como métodos e atributos.
     
-        self.display = pygame.display.set_mode((480, 480)) #inicialização da tela
+        self.display = pygame.display.set_mode((480, 480)) #inicialização da tela no tamanho 480 x 480 px
         
-        pygame.display.set_caption('Cobra')
-        self.clock = pygame.time.Clock()
+        pygame.display.set_caption('Cobra') # Muda nome da janela, fica na parte superior
+        self.clock = pygame.time.Clock() # Esta função é usada para criar um objeto de relógio que pode ser usado para controlar o tempo. semelhante a fps
+
 
         pygame.display.set_mode((480, 480))
-        bg_img = pygame.image.load('bg2.jpg')
-        bg_img = pygame.transform.scale(bg_img,(480, 480))    
+        bg_img = pygame.image.load('bg2.jpg')                 # Carrega imagem do diretorio e armazena em bg_img
+        bg_img = pygame.transform.scale(bg_img,(480, 480))    # Transforma escala da imagem
         
-        self.direction = Direction.RIGHT
+        self.direction = Direction.RIGHT                       # Direcao direita
 
-        self.cabeca = Point(480/2, 480/2)
+        self.cabeca = Point(480/2, 480/2)  # Altura e Largura /2 | Basicamente desenha um ponto em um ponto específico em uma imagem. 
+        # Ele simplesmente leva dois argumentos x, y para a coordenada do ponto.
         self.cobra = [self.cabeca, Point(self.cabeca.x-DIMENSAO_QUAD,self.cabeca.y),Point(self.cabeca.x-(2*DIMENSAO_QUAD),self.cabeca.y)]
         self.pontuacao = 0
         self.comida = None
         self._lugar_comida()
     
-    def _lugar_comida(self):
-        x = random.randint(0, (480-DIMENSAO_QUAD) // DIMENSAO_QUAD)*DIMENSAO_QUAD
+    def _lugar_comida(self): # cria o local da comida o random faz com que a comida fique variando cada jogada
+        x = random.randint(0, (480-DIMENSAO_QUAD) // DIMENSAO_QUAD)*DIMENSAO_QUAD 
         y = random.randint(0, (480-DIMENSAO_QUAD) // DIMENSAO_QUAD)*DIMENSAO_QUAD
         self.comida = Point(x,y)
         if self.comida in self.cobra:
             
             self._lugar_comida()
     
-    def play_step(self):
+    def play_step(self):   # controle do jogo
         #1. coleta entrada do user
-        for event in pygame.event.get():
+        for event in pygame.event.get(): #registra todos os eventos do jogo
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
@@ -77,8 +83,8 @@ class jogo_cobra:
                     self.direction = Direction.DOWN
         
         #2. movimentação
-        self._move(self.direction) 
-        self.cobra.insert(0,self.cabeca)
+        self._move(self.direction) # insere alguma das funcoes acima
+        self.cobra.insert(0,self.cabeca) #cabeca na posicao zero
 
         #3. checar se o jogo acabou
         fim_de_jogo = False
@@ -88,12 +94,13 @@ class jogo_cobra:
         
         #4 posicao da nova comida/mover comida
         if self.cabeca == self.comida:
-            self.pontuacao +=1
+            self.pontuacao +=1      # aumenta pontuação 
             self._lugar_comida()
             pygame.mixer.music.load('rapai.wav')
             pygame.mixer.music.play()
         else:
-            self.cobra.pop()
+            self.cobra.pop() # registrar todos os eventos do usuário em uma fila de eventos que pode ser recebida com o código. 
+            # Todos eles terão o atributo type , que é um número inteiro que representa o tipo de evento.
 
         #5 atualizando interface do usuario (UI) e pontuacao
         self._update_ui()
@@ -123,7 +130,7 @@ class jogo_cobra:
         background.blit(image, (0,0))
 
         for pt in self.cobra:
-            pygame.draw.rect(self.display, (0,0,0), pygame.Rect(pt.x, pt.y, DIMENSAO_QUAD, DIMENSAO_QUAD))
+            pygame.draw.rect(self.display, (0,0,0), pygame.Rect(pt.x, pt.y, DIMENSAO_QUAD, DIMENSAO_QUAD)) # objetos orientados na forma retangular da area
             pygame.draw.rect(self.display, COR_STROKE, pygame.Rect(pt.x+2, pt.y+2, 16, 16))
 
         #pygame.draw.rect(self.display, (255,255,255), pygame.Rect(self.comida.x, self.comida.y, DIMENSAO_QUAD+1, DIMENSAO_QUAD+1))
@@ -170,7 +177,7 @@ class jogo_cobra:
         self.display.blit(text, [0, 0])
         pygame.display.flip()
 
-    def _move(self, direction):
+    def _move(self, direction): #movimentacao 
         x = self.cabeca.x
         y = self.cabeca.y
         if direction == Direction.RIGHT:
