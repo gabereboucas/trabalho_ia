@@ -173,20 +173,19 @@ class JogoCobraIA:
 
 
     def _move(self, acao):
-        # [straight, right, left]
+                                                        #[Continuar reto, Virar a direita, Virar a esquerda]
 
         clock_wise = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
-        idx = clock_wise.index(self.direction)
+        idx = clock_wise.index(self.direction)          #A função index() retorna o índice da primeira ocorrência que encontra a partir do índice 0
 
-        if np.array_equal(acao, [1, 0, 0]):
-            new_dir = clock_wise[idx] # no change
+        if np.array_equal(acao, [1, 0, 0]):             #A função numpy array_equal() retorna True se os arrays são iguais e False se os arrays não são iguais
+            new_dir = clock_wise[idx]                   #Sem mudança
         elif np.array_equal(acao, [0, 1, 0]):
             next_idx = (idx + 1) % 4
-            new_dir = clock_wise[next_idx] # right turn r -> d -> l -> u
+            new_dir = clock_wise[next_idx]              #Virar a direita -> Descer -> Virar a esquerda -> Subir
         else: # [0, 0, 1]
             next_idx = (idx - 1) % 4
-            new_dir = clock_wise[next_idx] # left turn r -> u -> l -> d
-
+            new_dir = clock_wise[next_idx]              #Virar a esquerda -> Subir -> Virar a direita -> Descer
         self.direction = new_dir
 
         x = self.cabeca.x

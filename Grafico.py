@@ -1,19 +1,17 @@
 import matplotlib.pyplot as plt         
-from IPython import display
 import numpy          #pacote NumPy para cálculos numéricos
 import matplotlib  # usado com o NumPy para criação de gráficos e visualizações de dados
-
+from IPython import display
 from matplotlib import pyplot
 
 plt.ion() # Matplotlib é uma biblioteca de visualização em Python para gráficos 2D de matrizes.
 
 plt.style.use('dark_background') # tema de gráfico dark melhor visualizacão
-
+plt.figure('Grafico de desempenho')
 plt.show() # função no módulo pyplot da biblioteca matplotlib é usada para exibir todas as figuras
 
 def plot(pontos, media):
     display.clear_output(wait=False) # armazena em buffer os últimos n eventos. Sempre que o buffer muda,pode limpar a saída da célula e imprimir o buffer novamente.
-    display.display(plt.gcf()) # permite que você obtenha uma referência à figura atual ao usar pyplot .
     plt.clf() # são usados ​​para limpar a figura atual, usado antes de definir um gráfico para que os anteriores não interfiram nos próximos.
     plt.title('Treinamento')
     plt.xlabel('Quantidade de jogos')

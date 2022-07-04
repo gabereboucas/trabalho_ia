@@ -7,8 +7,8 @@ from modelo_busca import QNet, QTrainer
 from Grafico import plot
 
 
-MAX_MEMORY = 100_000
-BATCH_SIZE = 1000
+Memoria_M = 100_000
+Carga = 1000 #Batch
 LR = 0.001
 
 class Agent:
@@ -17,7 +17,7 @@ class Agent:
         self.n_jogos = 0
         self.epsilon = 0 # aleatoriedade
         self.gamma = 0.9 # taxa de desconto
-        self.memory = deque(maxlen=MAX_MEMORY) # popleft()
+        self.memory = deque(maxlen=Memoria_M) # popleft() remove um elemento do lado esquerdo do deque e retorna o valor.
         self.model = QNet(11, 256, 3)
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
@@ -69,11 +69,11 @@ class Agent:
         return np.array(estado, dtype=int)
 
     def remember(self, estado, acao, recompensa, prox_estado, pronto):
-        self.memory.append((estado, acao, recompensa, prox_estado, pronto)) # popleft se MAX_MEMORY for alcançado
+        self.memory.append((estado, acao, recompensa, prox_estado, pronto)) # popleft se Memoria_M for alcançado
 
     def train_long_memory(self):
-        if len(self.memory) > BATCH_SIZE:
-            mini_sample = random.sample(self.memory, BATCH_SIZE) # lista de tuplas
+        if len(self.memory) > Carga:
+            mini_sample = random.sample(self.memory, Carga) # lista de tuplas
         else:
             mini_sample = self.memory
 
@@ -99,7 +99,6 @@ class Agent:
             final_move[move] = 1
 
         return final_move
-
 
 def train():
     plot_pontos = []
@@ -133,7 +132,6 @@ def train():
 
             if pontuacao > recorde:
                 recorde = pontuacao
-                agent.model.save()
 
             print('Jogo', agent.n_jogos, 'Ponto', pontuacao, 'Recorde:', recorde)
 
