@@ -24,6 +24,7 @@ random_color2=list(np.random.choice(range(255),size=4))
 random_color3=list(np.random.choice(range(255),size=4))
 
 #cores rgb
+PRETO =(0,0,0)
 BRANCO = (255, 255, 255)
 #COR_COMIDA = pygame.image.load('mata.jpg')
 COR_COMIDA = (random_color)
@@ -31,7 +32,7 @@ COR_QUAD = (random_color2)
 COR_STROKE = (random_color3)
 
 DIMENSAO_QUAD = 20 # dimensiona o tamanho da cobra px
-SPEED = 23         # velocidade da cobra px
+SPEED = 1         # velocidade da cobra px
 
 class jogo_cobra:  # classe que cria jogo cobra
 
@@ -39,26 +40,26 @@ class jogo_cobra:  # classe que cria jogo cobra
         #não serve para nenhum outro propósito.É usado apenas dentro de classes
         # Self: permite acessar facilmente todas as instâncias definidas dentro de uma classe, como métodos e atributos.
     
-        self.display = pygame.display.set_mode((480, 480)) #inicialização da tela no tamanho 480 x 480 px
+        self.display = pygame.display.set_mode((480, 480))      #inicialização da tela no tamanho 480 x 480 px
         
-        pygame.display.set_caption('Cobra') # Muda nome da janela, fica na parte superior
-        self.clock = pygame.time.Clock() # Esta função é usada para criar um objeto de relógio que pode ser usado para controlar o tempo. semelhante a fps
+        pygame.display.set_caption('Trabalho de IA- Jogo da cobra manual')                     # Muda nome da janela, fica na parte superior
+        self.clock = pygame.time.Clock()                        # Esta função é usada para criar um objeto de relógio que pode ser usado para controlar o tempo. semelhante a fps
 
 
         pygame.display.set_mode((480, 480))
-        bg_img = pygame.image.load('bg2.jpg')                 # Carrega imagem do diretorio e armazena em bg_img
-        bg_img = pygame.transform.scale(bg_img,(480, 480))    # Transforma escala da imagem
+        bg_img = pygame.image.load('bg2.jpg')                   # Carrega imagem do diretorio e armazena em bg_img
+        bg_img = pygame.transform.scale(bg_img,(480, 480))      # Transforma escala da imagem
         
-        self.direction = Direction.RIGHT                       # Direcao direita
+        self.direction = Direction.RIGHT                        # Direcao direita
 
-        self.cabeca = Point(480/2, 480/2)  # Altura e Largura /2 | Basicamente desenha um ponto em um ponto específico em uma imagem. 
+        self.cabeca = Point(480/2, 480/2)                       # Altura e Largura /2 | Basicamente desenha um ponto em um ponto específico em uma imagem. 
         # Ele simplesmente leva dois argumentos x, y para a coordenada do ponto.
         self.cobra = [self.cabeca, Point(self.cabeca.x-DIMENSAO_QUAD,self.cabeca.y),Point(self.cabeca.x-(2*DIMENSAO_QUAD),self.cabeca.y)]
         self.pontuacao = 0
         self.comida = None
         self._lugar_comida()
     
-    def _lugar_comida(self): # cria o local da comida o random faz com que a comida fique variando cada jogada
+    def _lugar_comida(self):                                    # cria o local da comida o random faz com que a comida fique variando cada jogada
         x = random.randint(0, (480-DIMENSAO_QUAD) // DIMENSAO_QUAD)*DIMENSAO_QUAD 
         y = random.randint(0, (480-DIMENSAO_QUAD) // DIMENSAO_QUAD)*DIMENSAO_QUAD
         self.comida = Point(x,y)
@@ -66,9 +67,9 @@ class jogo_cobra:  # classe que cria jogo cobra
             
             self._lugar_comida()
     
-    def play_step(self):   # controle do jogo
+    def play_step(self):                                        # controle do jogo
         #1. coleta entrada do user
-        for event in pygame.event.get(): #registra todos os eventos do jogo
+        for event in pygame.event.get():                        #registra todos os eventos do jogo
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
@@ -130,9 +131,43 @@ class jogo_cobra:  # classe que cria jogo cobra
         background.blit(image, (0,0))
 
         for pt in self.cobra:
-            pygame.draw.rect(self.display, (0,0,0), pygame.Rect(pt.x, pt.y, DIMENSAO_QUAD, DIMENSAO_QUAD)) # objetos orientados na forma retangular da area
+            #Desenho do Corpo
+            pygame.draw.rect(self.display, PRETO, pygame.Rect(pt.x, pt.y, DIMENSAO_QUAD, DIMENSAO_QUAD)) 
             pygame.draw.rect(self.display, COR_STROKE, pygame.Rect(pt.x+2, pt.y+2, 16, 16))
 
+        for pt in self.cabeca:
+            #Desenho da Cabeça
+            pygame.draw.rect(self.display, (PRETO), pygame.Rect(self.cabeca.x, self.cabeca.y, DIMENSAO_QUAD, DIMENSAO_QUAD)) 
+            pygame.draw.polygon(self.display,PRETO,  
+            [(self.cabeca.x-5, self.cabeca.y+11),
+            (self.cabeca.x-5, self.cabeca.y+9),
+            (self.cabeca.x+8, self.cabeca.y-4),
+            (self.cabeca.x+10, self.cabeca.y-4),
+            (self.cabeca.x+23, self.cabeca.y+9), 
+            (self.cabeca.x+23, self.cabeca.y+11), 
+            (self.cabeca.x+10, self.cabeca.y+24),
+            (self.cabeca.x+8, self.cabeca.y+24)]) 
+            pygame.draw.polygon(self.display,COR_STROKE,  
+            [(self.cabeca.x-2, self.cabeca.y+11),
+            (self.cabeca.x-2, self.cabeca.y+9),
+            (self.cabeca.x+8, self.cabeca.y-1),
+            (self.cabeca.x+10, self.cabeca.y-1),
+            (self.cabeca.x+20, self.cabeca.y+9), 
+            (self.cabeca.x+20, self.cabeca.y+11), 
+            (self.cabeca.x+10, self.cabeca.y+21),
+            (self.cabeca.x+8, self.cabeca.y+21)])
+            pygame.draw.rect(self.display, COR_STROKE, pygame.Rect(self.cabeca.x+2, self.cabeca.y+2, 16, 16))
+            pygame.draw.polygon(self.display,PRETO,  
+            [(self.cabeca.x+3, self.cabeca.y+11),
+            (self.cabeca.x+3, self.cabeca.y+9),
+            (self.cabeca.x+8, self.cabeca.y+4),
+            (self.cabeca.x+10, self.cabeca.y+4),
+            (self.cabeca.x+15, self.cabeca.y+9), 
+            (self.cabeca.x+15, self.cabeca.y+11), 
+            (self.cabeca.x+10, self.cabeca.y+16),
+            (self.cabeca.x+8, self.cabeca.y+16)])
+            
+        #Desenho da comida (Tema do Orgulho)
         #pygame.draw.rect(self.display, (255,255,255), pygame.Rect(self.comida.x, self.comida.y, DIMENSAO_QUAD+1, DIMENSAO_QUAD+1))
         pygame.draw.polygon(self.display,(255,0,0),  
             [(self.comida.x+1, self.comida.y+8),
@@ -170,8 +205,6 @@ class jogo_cobra:  # classe que cria jogo cobra
             [(self.comida.x+6, self.comida.y+15), 
             (self.comida.x+14, self.comida.y+15), 
             (self.comida.x+10, self.comida.y+19)])
-
-        #pygame.Surface.blit('mata.jpg',self.display,pygame.Rect(self.comida.x, self.comida.y, DIMENSAO_QUAD, DIMENSAO_QUAD))
 
         text = font.render("Pontos: " + str(self.pontuacao), True, BRANCO)
         self.display.blit(text, [0, 0])

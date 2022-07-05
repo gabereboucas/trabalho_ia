@@ -22,11 +22,11 @@ random_color2=list(np.random.choice(range(255),size=3))
 random_color3=list(np.random.choice(range(255),size=3))
 
 # rgb colors
+PRETO = (0,0,0)
 BRANCO = (255,255,255)
 COR_COMIDA = (random_color)
 COR_QUAD = (random_color2)
 COR_STROKE = (random_color3)
-COR_FUNDO = (0,0,0)
 
 
 DIMENSAO_QUAD = 20
@@ -37,10 +37,9 @@ class JogoCobraIA:
     def __init__(self):
 
         self.display = pygame.display.set_mode((480,480))
-        pygame.display.set_caption('Cobra')
+        pygame.display.set_caption('Trabalho de IA- Jogo da cobra com IA')
         self.clock = pygame.time.Clock()
         self.reset()
-
 
     def reset(self):
         #ordena reinicializacao cabeca, corpo, ponto e comida
@@ -55,7 +54,6 @@ class JogoCobraIA:
         self.comida = None
         self._lugar_comida()
         self.frame_iteration = 0
-
 
     def _lugar_comida(self):
         #local da comida e sua modificacao
@@ -118,16 +116,47 @@ class JogoCobraIA:
 
         return False
 
-
     def _update_ui(self):
-        #self.display.fill(COR_FUNDO) 
         self.display.blit(image, (0,0))
         
-        
         for pt in self.cobra:
-            pygame.draw.rect(self.display, (0,0,0), pygame.Rect(pt.x, pt.y, DIMENSAO_QUAD, DIMENSAO_QUAD))
+            #Desenho do Corpo
+            pygame.draw.rect(self.display, PRETO, pygame.Rect(pt.x, pt.y, DIMENSAO_QUAD, DIMENSAO_QUAD)) 
             pygame.draw.rect(self.display, COR_STROKE, pygame.Rect(pt.x+2, pt.y+2, 16, 16))
 
+        for pt in self.cabeca:
+            #Desenho da Cabeça
+            pygame.draw.rect(self.display, (PRETO), pygame.Rect(self.cabeca.x, self.cabeca.y, DIMENSAO_QUAD, DIMENSAO_QUAD)) 
+            pygame.draw.polygon(self.display,PRETO,  
+            [(self.cabeca.x-5, self.cabeca.y+11),
+            (self.cabeca.x-5, self.cabeca.y+9),
+            (self.cabeca.x+8, self.cabeca.y-4),
+            (self.cabeca.x+10, self.cabeca.y-4),
+            (self.cabeca.x+23, self.cabeca.y+9), 
+            (self.cabeca.x+23, self.cabeca.y+11), 
+            (self.cabeca.x+10, self.cabeca.y+24),
+            (self.cabeca.x+8, self.cabeca.y+24)]) 
+            pygame.draw.polygon(self.display,COR_STROKE,  
+            [(self.cabeca.x-2, self.cabeca.y+11),
+            (self.cabeca.x-2, self.cabeca.y+9),
+            (self.cabeca.x+8, self.cabeca.y-1),
+            (self.cabeca.x+10, self.cabeca.y-1),
+            (self.cabeca.x+20, self.cabeca.y+9), 
+            (self.cabeca.x+20, self.cabeca.y+11), 
+            (self.cabeca.x+10, self.cabeca.y+21),
+            (self.cabeca.x+8, self.cabeca.y+21)])
+            pygame.draw.rect(self.display, COR_STROKE, pygame.Rect(self.cabeca.x+2, self.cabeca.y+2, 16, 16))
+            pygame.draw.polygon(self.display,PRETO,  
+            [(self.cabeca.x+3, self.cabeca.y+11),
+            (self.cabeca.x+3, self.cabeca.y+9),
+            (self.cabeca.x+8, self.cabeca.y+4),
+            (self.cabeca.x+10, self.cabeca.y+4),
+            (self.cabeca.x+15, self.cabeca.y+9), 
+            (self.cabeca.x+15, self.cabeca.y+11), 
+            (self.cabeca.x+10, self.cabeca.y+16),
+            (self.cabeca.x+8, self.cabeca.y+16)])
+            
+        #Desenho da comida (Tema do Orgulho)
         #pygame.draw.rect(self.display, (255,255,255), pygame.Rect(self.comida.x, self.comida.y, DIMENSAO_QUAD+1, DIMENSAO_QUAD+1))
         pygame.draw.polygon(self.display,(255,0,0),  
             [(self.comida.x+1, self.comida.y+8),
@@ -166,11 +195,9 @@ class JogoCobraIA:
             (self.comida.x+14, self.comida.y+15), 
             (self.comida.x+10, self.comida.y+19)])
 
-
         text = font.render("Pontos: " + str(self.pontuacao), True, BRANCO)
         self.display.blit(text, [0, 0])
         pygame.display.flip()
-
 
     def _move(self, acao):
                                                         #[Continuar reto, Virar a direita, Virar a esquerda]
